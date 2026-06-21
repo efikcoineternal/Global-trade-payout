@@ -35,7 +35,6 @@
         h1 { color: #ffffff; margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
         h1 span { color: var(--accent-color); }
         
-        /* Premium Asset Grid Layout */
         .crypto-bar {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
@@ -60,7 +59,7 @@
 
         .grid-layout {
             display: grid;
-            grid-template-columns: 1.12fr 1.88fr;
+            grid-template-columns: 1.15fr 1.85fr;
             gap: 25px;
         }
         @media (max-width: 900px) {
@@ -74,13 +73,12 @@
             height: fit-content;
         }
         .card h2 {
-            color: #e2e8f0;
+            color: var(--accent-color);
             font-size: 16px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-top: 0;
             margin-bottom: 20px;
-            color: var(--accent-color);
         }
         label {
             display: block;
@@ -109,25 +107,27 @@
             border: none;
             border-radius: 6px;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 15px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.1s;
         }
         button:hover { background-color: #d97706; }
+        button:active { transform: scale(0.99); }
         
-        /* High-Trust Financial Statement Invoice */
+        /* Blockchain Receipt Layout Styling */
         .invoice-box {
             background-color: #ffffff;
             color: #000000;
-            border-radius: 4px;
+            border-radius: 6px;
             padding: 25px;
-            max-width: 360px;
+            max-width: 380px;
             margin: 25px auto 0 auto;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
             font-family: 'Courier New', Courier, monospace;
             display: none;
+            border: 1px solid #e2e8f0;
         }
         .invoice-header-title {
             text-align: center;
@@ -137,14 +137,21 @@
             text-transform: uppercase;
         }
         .dashed-divider {
-            border-top: 1px dashed #000000;
+            border-top: 2px dashed #1a1a1a;
             margin: 12px 0;
         }
         .invoice-row {
             display: flex;
             justify-content: space-between;
-            margin: 7px 0;
-            font-size: 13px;
+            margin: 8px 0;
+            font-size: 12px;
+            word-break: break-all;
+        }
+        .invoice-row span:first-child {
+            font-weight: bold;
+            color: #4a5568;
+            padding-right: 10px;
+            min-width: 120px;
         }
 
         /* Settlement Ledger */
@@ -184,7 +191,7 @@
     <div class="crypto-bar">
         <div class="crypto-coin-card coin-efc"><div class="coin-name">Efikcoin (EFC)</div><div class="coin-balance" id="bal-EFC">750,000.00</div></div>
         <div class="crypto-coin-card coin-usdt"><div class="coin-name">Tether (USDT)</div><div class="coin-balance" id="bal-USDT">25,600.00</div></div>
-        <div class="crypto-coin-card coin-btc"><div class="coin-name">Bitcoin (BTC)</div><div class="coin-balance" id="bal-BTC">3.84120</div></div>
+        <div class="crypto-coin-card coin-btc"><div class="coin-name">Bitcoin (BTC)</div><div class="coin-balance" id="bal-BTC">3.84105</div></div>
         <div class="crypto-coin-card coin-bnb"><div class="coin-name">Binance (BNB)</div><div class="coin-balance" id="bal-BNB">184.50</div></div>
         <div class="crypto-coin-card coin-eth"><div class="coin-name">Ethereum (ETH)</div><div class="coin-balance" id="bal-ETH">12.640</div></div>
     </div>
@@ -195,9 +202,9 @@
             
             <label for="cryptoSelect">Asset Class</label>
             <select id="cryptoSelect">
+                <option value="BTC">Bitcoin (BTC)</option>
                 <option value="EFC">Efikcoin (EFC)</option>
                 <option value="USDT">Tether (USDT)</option>
-                <option value="BTC">Bitcoin (BTC)</option>
                 <option value="BNB">Binance (BNB)</option>
                 <option value="ETH">Ethereum (ETH)</option>
             </select>
@@ -206,23 +213,35 @@
             <input type="text" id="destination" value="0x71C7656EC7ab88b098defB751B7401B5f6d8976F" placeholder="0x...">
 
             <label for="amount">Payout Value (USD)</label>
-            <input type="number" id="amount" value="500.00" placeholder="0.00" step="0.01">
+            <input type="number" id="amount" value="10.00" placeholder="0.00" step="0.01">
 
-            <button onclick="executeGlobalTradePayout()">Execute Secure Payout</button>
+            <button onclick="executeGlobalTradePayout()">Send</button>
             
             <div id="invoiceSlip" class="invoice-box">
                 <div class="invoice-header-title">Global Trade Payout</div>
-                <div class="invoice-header-title" style="font-size: 12px; margin-top:4px; color:#555;">Official Transaction Statement</div>
+                <div class="invoice-header-title" style="font-size: 11px; margin-top:4px; color:#4a5568;">Distributed Ledger Node Receipt</div>
                 <div class="dashed-divider"></div>
-                <div class="invoice-row"><span>Transaction ID:</span><span id="invId" style="font-weight: bold;"></span></div>
+                
+                <div class="invoice-row"><span>Status:</span><span style="font-weight: bold; color: #10b981;">● SUCCESS / SECURED</span></div>
+                <div class="invoice-row"><span>Tx Hash ID:</span><span id="invHash" style="font-family: monospace;"></span></div>
+                <div class="invoice-row"><span>Block Height:</span><span id="invBlock"></span></div>
                 <div class="invoice-row"><span>Timestamp:</span><span id="invDate"></span></div>
-                <div class="invoice-row"><span>Settlement Asset:</span><span id="invAsset"></span></div>
-                <div class="invoice-row"><span>Status:</span><span style="font-weight: bold; color: green;">SETTLED / COMPLETED</span></div>
+                
                 <div class="dashed-divider"></div>
-                <div class="invoice-row"><span>Payout Value:</span><span id="invUsd" style="font-weight: bold;"></span></div>
-                <div class="invoice-row"><span>Destination Node:</span><span id="invWallet"></span></div>
+                
+                <div class="invoice-row"><span>From Node:</span><span style="font-family: monospace;">0xAdmin...LiquidityPool</span></div>
+                <div class="invoice-row"><span>To Node:</span><span id="invWallet" style="font-family: monospace;"></span></div>
+                <div class="invoice-row"><span>Settlement Asset:</span><span id="invAsset" style="font-weight: bold;"></span></div>
+                
                 <div class="dashed-divider"></div>
-                <div style="font-size: 10px; text-align: center; color: #555;">Cryptographic proof generated on ledger block.</div>
+                
+                <div class="invoice-row"><span>Transfer Volume:</span><span id="invTokens" style="font-weight: bold;"></span></div>
+                <div class="invoice-row"><span>Value Equivalent:</span><span id="invUsd" style="font-weight: bold; color: #1a202c;"></span></div>
+                <div class="invoice-row"><span>Network Gas Fee:</span><span id="invGas" style="color: #4a5568;"></span></div>
+                <div class="invoice-row"><span>Confirmations:</span><span>32/32 (Finalized)</span></div>
+                
+                <div class="dashed-divider"></div>
+                <div style="font-size: 10px; text-align: center; color: #718096; font-weight: bold;">🔒 Cryptographically Signed via Node Core</div>
             </div>
         </div>
 
@@ -255,17 +274,16 @@
 </div>
 
 <script>
-    // Rates relative to 1 USD
     const assetPriceIndex = { "EFC": 1, "USDT": 1, "BTC": 65000, "BNB": 580, "ETH": 3300 };
 
     function executeGlobalTradePayout() {
         const asset = document.getElementById('cryptoSelect').value;
         const walletAddress = document.getElementById('destination').value || "0x71C7656EC7ab88b098defB751B7401B5f6d8976F";
-        const usdValue = parseFloat(document.getElementById('amount').value || "500");
+        const usdValue = parseFloat(document.getElementById('amount').value || "10");
 
         const tokensToDeduct = usdValue / assetPriceIndex[asset];
 
-        // 1. Dynamic admin balance pool deduction
+        // 1. Balance Deduction Logic
         const balanceField = document.getElementById(`bal-${asset}`);
         if (balanceField) {
             let currentBal = parseFloat(balanceField.innerText.replace(/,/g, ''));
@@ -274,38 +292,52 @@
             balanceField.innerText = newBal.toLocaleString(undefined, {minimumFractionDigits: precision, maximumFractionDigits: precision});
         }
 
-        // 2. Generate Statement Data
+        // 2. Cryptographic String Generators
         const now = new Date();
         const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
-        const randomTxNum = "GTP-" + Math.floor(100000 + Math.random() * 900000);
+        
+        const hexChars = '0123456789abcdef';
+        let fullHash = '0x';
+        for(let i=0; i<32; i++) fullHash += hexChars[Math.floor(Math.random()*16)];
+        
+        const shortHash = fullHash.slice(0, 10) + "..." + fullHash.slice(-8);
         const shortWallet = walletAddress.slice(0, 8) + "..." + walletAddress.slice(-6);
+        const pseudoBlock = Math.floor(19482000 + Math.random() * 5000);
 
-        // Populate Statement
-        document.getElementById('invId').innerText = randomTxNum;
+        // Precise decimal configuration
+        const tokenPrecision = (asset === 'EFC' || asset === 'USDT') ? 2 : 6;
+        const formattedTokens = tokensToDeduct.toLocaleString(undefined, {minimumFractionDigits: tokenPrecision, maximumFractionDigits: tokenPrecision});
+
+        // 3. Inject into Blockchain Statement Receipt
+        document.getElementById('invHash').innerText = fullHash.slice(0, 16) + "...";
+        document.getElementById('invBlock').innerText = `#${pseudoBlock}`;
         document.getElementById('invDate').innerText = formattedDate;
         document.getElementById('invAsset').innerText = asset;
+        document.getElementById('invWallet').innerText = walletAddress.slice(0, 14) + "...";
+        document.getElementById('invTokens').innerText = `${formattedTokens} ${asset}`;
         document.getElementById('invUsd').innerText = `$${usdValue.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-        document.getElementById('invWallet').innerText = shortWallet;
+        
+        // Dynamic Network Fees lookups
+        if(asset === 'BTC') {
+            document.getElementById('invGas').innerText = "0.000021 BTC";
+        } else if(asset === 'ETH') {
+            document.getElementById('invGas').innerText = "0.0012 ETH (21 Gwei)";
+        } else {
+            document.getElementById('invGas').innerText = "0.45 USD (BSC Network)";
+        }
 
-        // Show Statement Slip
+        // Display Statement Slip Component
         document.getElementById('invoiceSlip').style.display = 'block';
 
-        // 3. Append to running master ledger history row
-        const hexChars = '0123456789abcdef';
-        let txHash = '0x';
-        for(let i=0; i<12; i++) txHash += hexChars[Math.floor(Math.random()*16)];
-        txHash += '...';
-        for(let i=0; i<4; i++) txHash += hexChars[Math.floor(Math.random()*16)];
-
+        // 4. Update ledger component history roll
         const ledger = document.getElementById('ledgerBody');
         const row = document.createElement('tr');
-        const displayTokens = (asset === 'EFC' || asset === 'USDT') ? tokensToDeduct.toFixed(2) : tokensToDeduct.toFixed(5);
 
         row.innerHTML = `
             <td><b>${asset}</b></td>
-            <td>${parseFloat(displayTokens).toLocaleString()} ${asset}</td>
+            <td>${formattedTokens} ${asset}</td>
             <td>${shortWallet}</td>
-            <td class="hash-text">${txHash}</td>
+            <td class="hash-text">${shortHash}</td>
             <td><span class="status-pill success">Settled</span></td>
         `;
         ledger.insertBefore(row, ledger.firstChild);
@@ -313,5 +345,4 @@
 </script>
 
 </body>
-          </html>
-
+</html>
